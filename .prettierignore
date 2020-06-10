@@ -1,0 +1,14 @@
+node_modules
+dist
+yarn.lock
+.editorconfig
+.gitignore
+.prettierignore
+.eslintignore
+.lintstagedrc
+.huskyrc
+.yarnrc
+*.md
+*.log
+*.tmp
+*.temp
