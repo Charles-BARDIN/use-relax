@@ -1,11 +1,21 @@
 {
   "name": "use-relax",
   "version": "0.0.0",
+  "description": "use-relax is written in Typescript and contains only a single function useRelax that allows memorize an async method call. Once \"relaxed\", your async method will only be called once at a time with the same parameters.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Charles BARDIN <contact@charlesbardin.com>",
   "license": "MIT",
   "private": false,
+  "homepage": "https://github.com/Charles-BARDIN/use-relax/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Charles-BARDIN/use-relax.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Charles-BARDIN/use-relax/issues/",
+    "email": "contact@charlesbardin.com"
+  },
   "scripts": {
     "test": "jest --no-cache --passWithNoTests",
     "prebuild": "rm -rf ./dist",
@@ -31,5 +41,14 @@
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
-  }
+  },
+  "keywords": [
+    "concurrent",
+    "parallel",
+    "queue",
+    "async",
+    "relax",
+    "micro",
+    "light"
+  ]
 }
