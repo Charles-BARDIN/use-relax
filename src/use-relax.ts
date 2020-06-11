@@ -10,10 +10,29 @@ const parameterToRelaxedPromisesMapFactory = <T, U extends any[]>(
 ) => {
   const map = new Map<U, Promise<T>>();
 
+  const getParameters = (args: U): U | undefined =>
+    [...map.keys()].find((key) => {
+      if (!(key && key.length !== 0)) {
+        return !(args && args.length !== 0);
+      }
+
+      if (!(args && args.length !== 0)) {
+        return !(key && key.length !== 0);
+      }
+
+      if (key.length !== args.length) {
+        return false;
+      }
+
+      return parametersPredicate(key, args);
+    });
+
+  const hasParameters = (args: U): boolean => getParameters(args) !== undefined;
+
   const getPromise = (args: U): Promise<T> | undefined => {
     const parameters = getParameters(args);
     if (!parameters) {
-      return;
+      return undefined;
     }
 
     return map.get(parameters);
@@ -35,25 +54,6 @@ const parameterToRelaxedPromisesMapFactory = <T, U extends any[]>(
 
     map.delete(parameters);
   };
-
-  const hasParameters = (args: U): boolean => getParameters(args) !== undefined;
-
-  const getParameters = (args: U): U | undefined =>
-    [...map.keys()].find((key) => {
-      if (!(key && key.length !== 0)) {
-        return !(args && args.length !== 0);
-      }
-
-      if (!(args && args.length !== 0)) {
-        return !(key && key.length !== 0);
-      }
-
-      if (key.length !== args.length) {
-        return false;
-      }
-
-      return parametersPredicate(key, args);
-    });
 
   return {
     getPromise,
@@ -85,8 +85,6 @@ export const useRelax = <T, U extends any[]>(
     const relaxedPromise = parameterToRelaxedPromisesMap.getPromise(args) as Promise<T>;
     try {
       return await relaxedPromise;
-    } catch (e) {
-      throw e;
     } finally {
       parameterToRelaxedPromisesMap.removePromise(args);
     }
