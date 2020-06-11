@@ -86,8 +86,14 @@ describe('useRelax', () => {
   });
 
   describe('With a parametersPredicate given', () => {
-    it('Should use the predicate given to determine parameters equality', () => {
-      // TODO:
+    it('Should use the predicate given to determine parameters equality', async () => {
+      const predicate = jest.fn(() => true);
+
+      const relaxed = useRelax(methodToRelax, { parametersPredicate: predicate });
+
+      await relaxed(arg1);
+
+      expect(predicate).toHaveBeenCalled();
     });
   });
 
