@@ -1,7 +1,7 @@
 {
   "name": "use-relax",
   "version": "1.0.0",
-  "description": "use-relax is written in Typescript and contains only a single function useRelax that allows memorize an async method call. Once \"relaxed\", your async method will only be called once at a time with the same parameters.",
+  "description": "A light wrapper for async functions to prevent concurrent calls and memorize returned value",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Charles BARDIN <contact@charlesbardin.com>",
