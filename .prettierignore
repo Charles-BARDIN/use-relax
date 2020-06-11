@@ -8,6 +8,7 @@ yarn.lock
 .lintstagedrc
 .huskyrc
 .yarnrc
+.npmignore
 *.md
 *.log
 *.tmp
