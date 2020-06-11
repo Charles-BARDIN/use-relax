@@ -75,7 +75,9 @@ const myAsyncFunction = async (value1: string, value2: number) =>
     }, 1000);
   });
 
-const myRelaxedFunction = useRelax(myAsyncFunction);
+const myRelaxedFunction = useRelax(myAsyncFunction, {
+  memorizeValue: true,
+});
 
 await Promise.all([
   myRelaxedFunction('relax', 420), 
