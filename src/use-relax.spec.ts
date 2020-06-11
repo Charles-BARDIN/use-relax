@@ -84,4 +84,81 @@ describe('useRelax', () => {
 
     expect(await relaxed(arg1)).toBe(data);
   });
+
+  describe('With a parametersPredicate given', () => {
+    it('Should use the predicate given to determine parameters equality', () => {
+      // TODO:
+    });
+  });
+
+  describe('With the value memorized', () => {
+    it('Should call the async method if no Promise has been resolved with these parameters', async () => {
+      methodToRelax = jest.fn(() => new Promise((yeah) => yeah('MOCKED_RETURN')));
+
+      const relaxed = useRelax(methodToRelax, { memorizeValue: true });
+
+      await relaxed(arg1);
+
+      expect(methodToRelax).toHaveBeenCalledTimes(1);
+      expect(methodToRelax).toHaveBeenCalledWith(arg1);
+    });
+
+    it('Should not call the async method if a Promise has been resolved with these parameters', async () => {
+      methodToRelax = jest.fn(() => new Promise((yeah) => yeah('MOCKED_RETURN')));
+
+      const relaxed = useRelax(methodToRelax, { memorizeValue: true });
+
+      await relaxed(arg1);
+      await relaxed(arg1);
+
+      expect(methodToRelax).toHaveBeenCalledTimes(1);
+      expect(methodToRelax).toHaveBeenCalledWith(arg1);
+    });
+
+    it('Should call the async method if no Promise has been resolved with these parameters if the async method returns nothing', async () => {
+      methodToRelax = jest.fn(() => new Promise((yeah) => yeah()));
+
+      const relaxed = useRelax(methodToRelax, { memorizeValue: true });
+
+      await relaxed(arg1);
+
+      expect(methodToRelax).toHaveBeenCalledTimes(1);
+      expect(methodToRelax).toHaveBeenCalledWith(arg1);
+    });
+
+    it('Should not call the async method if a Promise has been resolved with these parameters if the async method returns nothing', async () => {
+      methodToRelax = jest.fn(() => new Promise((yeah) => yeah()));
+
+      const relaxed = useRelax(methodToRelax, { memorizeValue: true });
+
+      await relaxed(arg1);
+      await relaxed(arg1);
+
+      expect(methodToRelax).toHaveBeenCalledTimes(1);
+      expect(methodToRelax).toHaveBeenCalledWith(arg1);
+    });
+
+    it('Should call the async method if no Promise has been resolved with these parameters if the async method has no parameters', async () => {
+      const asyncMethod = jest.fn(() => new Promise((yeah) => yeah()));
+
+      const relaxed = useRelax(asyncMethod, { memorizeValue: true });
+
+      await relaxed();
+
+      expect(asyncMethod).toHaveBeenCalledTimes(1);
+      expect(asyncMethod).toHaveBeenCalledWith();
+    });
+
+    it('Should not call the async method if a Promise has been resolved with these parameters if the async method has no parameters', async () => {
+      const asyncMethod = jest.fn(() => new Promise((yeah) => yeah()));
+
+      const relaxed = useRelax(asyncMethod, { memorizeValue: true });
+
+      await relaxed();
+      await relaxed();
+
+      expect(asyncMethod).toHaveBeenCalledTimes(1);
+      expect(asyncMethod).toHaveBeenCalledWith();
+    });
+  });
 });
