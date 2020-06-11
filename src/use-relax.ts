@@ -65,24 +65,27 @@ const parameterToRelaxedPromisesMapFactory = <T, U extends any[]>(
 };
 
 /**
- *
- * @param request
- * @param parametersPredicate
+ * Prevents an async method to be called multiple times with the same parameters if the Promise is still pending.
+ * @param request The async request to relax
+ * @param parametersPredicate A method used to determine parameters equality
  */
-export const useRelax = <T, U extends any[]>(
-  request: RelaxRequestInput<T, U>,
-  parametersPredicate: RelaxParameterPredicate<U> = isSameParameters
-): RelaxRequest<T, U> => {
-  const parameterToRelaxedPromisesMap = parameterToRelaxedPromisesMapFactory<T, U>(
-    parametersPredicate
-  );
+export const useRelax = <PromiseResponseType, ParametersTypes extends any[]>(
+  request: RelaxRequestInput<PromiseResponseType, ParametersTypes>,
+  parametersPredicate: RelaxParameterPredicate<ParametersTypes> = isSameParameters
+): RelaxRequest<PromiseResponseType, ParametersTypes> => {
+  const parameterToRelaxedPromisesMap = parameterToRelaxedPromisesMapFactory<
+    PromiseResponseType,
+    ParametersTypes
+  >(parametersPredicate);
 
-  return async (...args: U) => {
+  return async (...args: ParametersTypes) => {
     if (!parameterToRelaxedPromisesMap.hasParameters(args)) {
       parameterToRelaxedPromisesMap.setPromise(request(...args), args);
     }
 
-    const relaxedPromise = parameterToRelaxedPromisesMap.getPromise(args) as Promise<T>;
+    const relaxedPromise = parameterToRelaxedPromisesMap.getPromise(args) as Promise<
+      PromiseResponseType
+    >;
     try {
       return await relaxedPromise;
     } finally {
