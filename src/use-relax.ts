@@ -133,9 +133,10 @@ const valueStoreFactory = <T, U extends any[]>(
 };
 
 /**
- * Prevents an async method to be called multiple times with the same parameters if the Promise is still pending.
- * @param request The async request to relax
- * @param parametersPredicate A method used to determine parameters equality
+ * Prevents an async function to be called multiple times with the same parameters if the Promise is still pending.
+ * The value returned by the async function can be memorized.
+ * @param request The async request to relax.
+ * @param config The configuration useRelax should use.
  */
 export const useRelax = <PromiseResponseType, ParametersTypes extends any[]>(
   request: RelaxRequestInput<PromiseResponseType, ParametersTypes>,
