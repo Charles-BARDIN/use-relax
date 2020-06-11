@@ -14,36 +14,51 @@ describe('useRelax', () => {
   });
 
   it('Should return a method that calls the method to relax with the given arguments', async () => {
-    const relaxed = useRelax(methodToRelax, arg1, arg2);
+    const relaxed = useRelax(methodToRelax);
 
-    await relaxed();
+    await relaxed(arg1, arg2);
 
     expect(methodToRelax).toHaveBeenCalled();
     expect(methodToRelax).toHaveBeenCalledWith(arg1, arg2);
   });
 
-  it('Should call the method to relax only once if called multiple times before resolving', async () => {
+  it('Should call the method to relax only once if called multiple times with the same parameters before resolving', async () => {
     methodToRelax = jest.fn(
-      () =>
-        new Promise((yeah) => {
-          setTimeout(yeah, 100);
+      async () =>
+        new Promise<string>((yeah) => {
+          setTimeout(() => yeah('MOCKED_RETURN'), 100);
         })
     );
 
-    const relaxed = useRelax(methodToRelax, arg1);
+    const relaxed = useRelax(methodToRelax);
 
-    await Promise.all([relaxed(), relaxed()]);
+    await Promise.all([relaxed(arg1), relaxed(arg1)]);
 
     expect(methodToRelax).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should call the method to relax multiple if called multiple times with different parameters before resolving', async () => {
+    methodToRelax = jest.fn(
+      async () =>
+        new Promise<string>((yeah) => {
+          setTimeout(() => yeah('MOCKED_RETURN'), 100);
+        })
+    );
+
+    const relaxed = useRelax(methodToRelax);
+
+    await Promise.all([relaxed(arg1), relaxed(2)]);
+
+    expect(methodToRelax).toHaveBeenCalledTimes(2);
   });
 
   it('Should call the method another time if the previous call is resolved', async () => {
     methodToRelax = jest.fn(() => Promise.resolve('MOCKED_RESOLVE'));
 
-    const relaxed = useRelax(methodToRelax, arg1);
+    const relaxed = useRelax(methodToRelax);
 
-    await relaxed();
-    await relaxed();
+    await relaxed(arg1);
+    await relaxed(arg1);
 
     expect(methodToRelax).toHaveBeenCalledTimes(2);
   });
@@ -56,17 +71,17 @@ describe('useRelax', () => {
         })
     );
 
-    const relaxed = useRelax(methodToRelax, arg1);
+    const relaxed = useRelax(methodToRelax);
 
-    await expect(relaxed()).toReject();
+    await expect(relaxed(arg1)).toReject();
   });
 
   it('Should return the data returned by the method to relax', async () => {
     const data = 'MOCKED_DATA';
     methodToRelax = jest.fn(() => new Promise((yeah) => yeah(data)));
 
-    const relaxed = useRelax(methodToRelax, arg1);
+    const relaxed = useRelax(methodToRelax);
 
-    expect(await relaxed()).toBe(data);
+    expect(await relaxed(arg1)).toBe(data);
   });
 });
