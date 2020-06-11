@@ -1,7 +1,7 @@
 # use-relax
 **Relax** your async methods calls !
 
-`use-relax` is written in Typescript and contains only a single function `useRelax` that allows memorize an async method call. Once "relaxed", your async method will only be called once at a time with the same parameters.
+`use-relax` is written in Typescript and contains only a single function `useRelax` that allows memorizing an async method call. Once "relaxed", your async method will only be called once at a time with the same parameters.
 
 ## Installation
 `use-relax` can be installed through `yarn` and `npm`.
@@ -15,13 +15,12 @@ To install from yarn, run:
 `yarn add use-relax`
 
 ## Usage
-`useRelax` takes as a first argument the async method to relax. The second argument is the configuration that allows setting a custom predicate for parameters equality and determine if the value returned should me memorized or not.
+`useRelax` takes as a first argument the async method to relax. The second argument is the configuration that allows setting a custom predicate for parameters equality and determine if the value returned should be memorized or not.
 
 ### Basic usage
 With no configuration given, the equality of parameters is based on strict equality and the value is not memorized.
 
 ```typescript
-// Import some chillness
 import { useRelax } from 'use-relax';
 
 const myAsyncFunction = async (value1: string, value2: number) =>
@@ -32,23 +31,21 @@ const myAsyncFunction = async (value1: string, value2: number) =>
     }, 1000);
   });
 
-// Relax that async function
 const myRelaxedFunction = useRelax(myAsyncFunction);
 
-// myAsyncFunction is only called once, easy ! 
 await Promise.all([
-  myRelaxedFunction('relax', 420), 
-  myRelaxedFunction('relax', 420), 
+  myRelaxedFunction('relax', 42), 
+  myRelaxedFunction('relax', 42), 
 
-  myRelaxedFunction('stay cool', 420)
+  myRelaxedFunction('stay cool', 42)
 ]);
 // Logs:
-// Called with "relax" and "420"
-// Called with "stay cool" and "420"
+// Called with "relax" and "42"
+// Called with "stay cool" and "42"
 
-await myRelaxedFunction('relax', 420);
+await myRelaxedFunction('relax', 42);
 // Logs:
-// Called with "relax" and "420"
+// Called with "relax" and "42"
 ```
 
 ### Configuration
@@ -80,16 +77,16 @@ const myRelaxedFunction = useRelax(myAsyncFunction, {
 });
 
 await Promise.all([
-  myRelaxedFunction('relax', 420), 
-  myRelaxedFunction('relax', 420), 
+  myRelaxedFunction('relax', 42), 
+  myRelaxedFunction('relax', 42), 
 
-  myRelaxedFunction('stay cool', 420)
+  myRelaxedFunction('stay cool', 42)
 ]);
 // Logs:
-// Called with "relax" and "420"
-// Called with "stay cool" and "420"
+// Called with "relax" and "42"
+// Called with "stay cool" and "42"
 
-await myRelaxedFunction('relax', 420);
+await myRelaxedFunction('relax', 42);
 // Logs nothing !
 ```
 
