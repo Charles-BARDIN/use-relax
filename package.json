@@ -1,6 +1,6 @@
 {
   "name": "use-relax",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A light wrapper for async functions to prevent concurrent calls and memorize returned value",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
