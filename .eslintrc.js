@@ -31,5 +31,6 @@ module.exports = {
     'import/extensions': 'off', // We don't want to specify `.ts` on all imports.
     'import/no-default-export': 'error', // We try to avoid default exports, to improve searchability and refactoring.
     'import/prefer-default-export': 'off', // We like named export as well.
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };
